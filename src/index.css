@@ -11,3 +11,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+span ~ span {
+  padding-left: 10px;
+}
+
+div ~ div {
+  margin: 10px 0;
+}
+
+.app {
+  padding: 0 20px;
+}
+
+.menu {
+  margin-bottom: 50px;
+}
+
+.menu-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  display: inline;
+  margin-right: 10px;
+}
+
+.page-title {
+  margin-bottom: 50px;
+}
+
+.movie-list {
+  margin-top: 50px;
+}
+
+.movie-list-item {
+  margin: 10px 0;
+  padding: 10px 0;
+}
+
+.sort-button {
+  margin-left: 10px;
+}
