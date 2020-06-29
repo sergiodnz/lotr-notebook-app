@@ -1,11 +1,11 @@
 # LOTR Notebook App
-React application made for teaching purposes. A notebook about J. R. R. Tolkien's "The Lord of The Rings".
+A notebook app about J. R. R. Tolkien's "The Lord of The Rings", made for teaching React Development.
 
-The was built iteractivetly, adding more requiriments and making use of new libraries on each iteration (see project's branches).
+It has been built iteractivetly, adding more requiriments and making use of new libraries on each new class. Each class has its own branch.
 
-## Main topics teached
+## Main Topics
 
-The main subjects approached while building the app:
+These are the major subjects, taught while building the app:
 
 - Create first components :white_check_mark:
   - Simple folder structure :white_check_mark:
