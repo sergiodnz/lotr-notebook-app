@@ -14,24 +14,19 @@ const App = () => {
     API.getAllMovies().then(data => setAllMovies(data));
   }, []);
 
+  const updateMovie = (id, callback) => {
+    const movies = allMovies.map(movie =>
+      movie._id === id ? callback(movie) : movie
+    );
+    setAllMovies(movies);
+  };
+
   const handleUpdateMovie = (id, shelf) => {
-    const updatedMovies = allMovies.map(movie => {
-      if (movie._id === id) {
-        return { ...movie, [shelf]: true };
-      }
-      return movie;
-    });
-    setAllMovies(updatedMovies);
+    updateMovie(id, movie => ({ ...movie, [shelf]: true }));
   };
 
   const handleResetMovie = id => {
-    const updatedMovies = allMovies.map(movie => {
-      if (movie._id === id) {
-        return { ...movie, bookmarked: false, watched: false };
-      }
-      return movie;
-    });
-    setAllMovies(updatedMovies);
+    updateMovie(id, movie => ({ ...movie, bookmarked: false, watched: false }));
   };
 
   return (

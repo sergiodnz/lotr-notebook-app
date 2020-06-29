@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MovieList from '../components/MovieList';
+import PageTitle from '../components/PageTitle';
 
 const Movies = ({ allMovies, onResetMovie, onUpdateMovie }) => {
   const watched = allMovies.filter(movie => movie.watched);
@@ -9,10 +10,7 @@ const Movies = ({ allMovies, onResetMovie, onUpdateMovie }) => {
 
   return (
     <div>
-      <div className="page-title">
-        <h1>The Lord of The Rings</h1>
-        <h2>notebook app / movies</h2>
-      </div>
+      <PageTitle title="The Lord of The Rings" path="movies" />
       <MovieList
         title="Movies"
         movies={movies}
