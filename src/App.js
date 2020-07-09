@@ -1,34 +1,21 @@
 import React from 'react';
-import Home from './Home';
-import Movies from './Movies';
-
-const getCurrentPage = () => {
-  const path = window.location.pathname;
-  switch (path) {
-    case '/':
-      return <Home />;
-    case '/movies':
-      return <Movies />;
-    default:
-      return <Home />;
-  }
-};
+import { BrowserRouter, Route } from 'react-router-dom';
+import Opcoes from './componentes/Opcoes';
+import Home from './pages/Home';
+import Movies from './pages/Movies';
 
 const App = () => {
   return (
     <div className="app">
-      <div className="menu">
-        <h3>Menu</h3>
-        <ul className="menu-items">
-          <li className="menu-item">
-            <a href="/">Home</a>
-          </li>
-          <li className="menu-item">
-            <a href="/movies">Movies</a>
-          </li>
-        </ul>
-      </div>
-      {getCurrentPage()}
+      <BrowserRouter>
+        <Opcoes />
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route path="/filmes">
+          <Movies />
+        </Route>
+      </BrowserRouter>
     </div>
   );
 };
