@@ -12,6 +12,9 @@ const Opcoes = () => {
         <li className="menu-item">
           <Link to="/filmes">Filmes</Link>
         </li>
+        <li className="menu-item">
+          <Link to="/livros">Livros</Link>
+        </li>
       </ul>
     </div>
   );

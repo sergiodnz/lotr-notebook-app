@@ -37,19 +37,19 @@ class Movies extends Component {
           titulo="Filmes"
           filmes={filmes}
           atualizarFilme={this.atualizarFilme}
-          ordenacao={ORDER_KEY.DEFAULT}
+          orderBy={ORDER_KEY.DEFAULT}
         />
         <ListaDeFilmes
           titulo="Assistidos"
           filmes={assitidos}
           atualizarFilme={this.atualizarFilme}
-          ordenacao={ORDER_KEY.NAME}
+          orderBy={ORDER_KEY.NAME}
         />
         <ListaDeFilmes
           titulo="Favoritos"
           filmes={favoritos}
           atualizarFilme={this.atualizarFilme}
-          ordenacao={ORDER_KEY.AWARDS}
+          orderBy={ORDER_KEY.AWARDS}
         />
       </div>
     );

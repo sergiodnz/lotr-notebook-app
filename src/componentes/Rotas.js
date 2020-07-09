@@ -1,20 +1,22 @@
 import React from 'react';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import Books from '../pages/Books';
 import Home from '../pages/Home';
 import Movies from '../pages/Movies';
 
 const Rotas = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/filmes">
-          <Movies />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <Route path="/">
+        <Home />
+      </Route>
+      <Route path="/filmes">
+        <Movies />
+      </Route>
+      <Route path="/livros">
+        <Books />
+      </Route>
+    </BrowserRouter>
   );
 };
 

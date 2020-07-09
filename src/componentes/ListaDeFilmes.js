@@ -1,39 +1,57 @@
 import React, { Component } from 'react';
 
+// cria enum para as chaves de ordenação disponíveis
 export const ORDER_KEY = {
   AWARDS: 'academyAwardWins',
   NAME: 'name',
   DEFAULT: '_id',
 };
+// cria enum para multiplicador usado para mudar a direcao da ordenacao
+export const ORDER_DIRECTION = {
+  DEFAULT: 1,
+  REVERSE: -1,
+};
 
 class ListaDeFilmes extends Component {
-  state = { orderBy: [], flag: 1 };
+  // cria a lista com valores default para ordenacao
+  state = {
+    orderBy: ORDER_KEY.DEFAULT,
+    orderDirection: ORDER_DIRECTION.DEFAULT,
+  };
 
+  // Seta a ordenação oriunda do parametro do componente
   componentDidMount() {
-    this.setState({ orderBy: this.props.ordenacao });
+    const { orderBy } = this.props;
+    this.setState({
+      orderBy,
+    });
   }
-
+  // metodo para ordenar a lista
   obtemOrdenacaoLista = (b, a, orderBy) => {
-    const flag = this.state.flag;
-
+    const orderDirection = this.state.orderDirection;
     switch (orderBy) {
       case ORDER_KEY.AWARDS:
-        return (b[ORDER_KEY.AWARDS] - a[ORDER_KEY.AWARDS]) * flag;
+        return (b[ORDER_KEY.AWARDS] - a[ORDER_KEY.AWARDS]) * orderDirection;
       case ORDER_KEY.NAME:
-        return (a[ORDER_KEY.NAME] > b[ORDER_KEY.NAME] ? 1 : -1) * flag;
+        return (
+          (a[ORDER_KEY.NAME] > b[ORDER_KEY.NAME] ? 1 : -1) * orderDirection
+        );
       default:
         return ORDER_KEY.DEFAULT;
     }
   };
 
+  // mudança de ordenação default ou reversa
   mudaOrdenacao = orderBy => {
-    //mudança de ordenação crescente/decrescente
-    const flag = this.state.orderBy === orderBy ? this.state.flag * -1 : 1;
-    this.setState({ orderBy, flag });
+    const orderDirection =
+      this.state.orderBy === orderBy
+        ? this.state.orderDirection * ORDER_DIRECTION.REVERSE
+        : ORDER_DIRECTION.DEFAULT;
+    this.setState({ orderBy, orderDirection });
   };
 
   render() {
-    const { orderBy, flag } = this.state;
+    const { orderBy, orderDirection } = this.state;
 
     const { titulo, filmes, atualizarFilme } = this.props;
 
@@ -53,7 +71,7 @@ class ListaDeFilmes extends Component {
               <i
                 className={
                   orderBy === ORDER_KEY.AWARDS
-                    ? flag === 1
+                    ? orderDirection === ORDER_DIRECTION.DEFAULT
                       ? 'fa fa-sort-amount-asc'
                       : 'fa fa-sort-amount-desc'
                     : 'fa fa-sort-amount-desc'
@@ -67,7 +85,7 @@ class ListaDeFilmes extends Component {
               <i
                 className={
                   orderBy === ORDER_KEY.NAME
-                    ? flag === 1
+                    ? orderDirection === ORDER_DIRECTION.DEFAULT
                       ? 'fa fa-sort-alpha-desc'
                       : 'fa fa-sort-alpha-asc'
                     : 'fa fa-sort-alpha-asc'
@@ -77,6 +95,7 @@ class ListaDeFilmes extends Component {
           </h3>
           <ul>
             {listaFilmes.map(movie => {
+              // constantes para exibir ou ocultar botoes de acordo com a lista a ser exibida
               const showCancelar = movie.watched || movie.bookmarked;
               const showAdicionar = !(movie.watched || movie.bookmarked);
               return (
