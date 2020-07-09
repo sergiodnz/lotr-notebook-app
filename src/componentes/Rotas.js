@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Books from '../pages/Books';
 import Home from '../pages/Home';
 import Movies from '../pages/Movies';
 
 const Rotas = () => {
   return (
-    <BrowserRouter>
+    <switch>
       <Route path="/">
         <Home />
       </Route>
@@ -16,7 +16,7 @@ const Rotas = () => {
       <Route path="/livros">
         <Books />
       </Route>
-    </BrowserRouter>
+    </switch>
   );
 };
 
