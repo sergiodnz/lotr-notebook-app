@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getBooks } from '../api/livros';
 import ListaDeLivros from '../componentes/ListaDeLivros';
+import TituloPagina from '../componentes/TituloPagina';
 
 class Books extends Component {
   state = { livros: [] };
@@ -13,7 +14,10 @@ class Books extends Component {
     const livros = this.state.livros;
     return (
       <div>
-        <ListaDeLivros titulo="Livros" livros={livros} />
+        <TituloPagina titulo="Livros" />
+        <div>
+          <ListaDeLivros titulo="Livros" livros={livros} />
+        </div>
       </div>
     );
   }

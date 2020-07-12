@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import React, { Component } from 'react';
 
 // cria enum para as chaves de ordenação disponíveis
@@ -59,6 +60,16 @@ class ListaDeFilmes extends Component {
       return this.obtemOrdenacaoLista(b, a, orderBy);
     });
 
+    const btnAwardsAscDesc =
+      orderBy === ORDER_KEY.AWARDS && orderDirection === ORDER_DIRECTION.DEFAULT
+        ? 'asc'
+        : 'desc';
+    const btnNameAscDesc = !(
+      orderBy === ORDER_KEY.NAME && orderDirection === ORDER_DIRECTION.DEFAULT
+    )
+      ? 'asc'
+      : 'desc';
+
     return (
       <div>
         <div className="movie-list">
@@ -68,29 +79,13 @@ class ListaDeFilmes extends Component {
               className="sort-button"
               onClick={() => this.mudaOrdenacao(ORDER_KEY.AWARDS)}
             >
-              <i
-                className={
-                  orderBy === ORDER_KEY.AWARDS
-                    ? orderDirection === ORDER_DIRECTION.DEFAULT
-                      ? 'fa fa-sort-amount-asc'
-                      : 'fa fa-sort-amount-desc'
-                    : 'fa fa-sort-amount-desc'
-                }
-              ></i>
+              <i className={'fa fa-sort-amount-' + btnAwardsAscDesc}></i>
             </button>
             <button
               className="sort-button"
               onClick={() => this.mudaOrdenacao(ORDER_KEY.NAME)}
             >
-              <i
-                className={
-                  orderBy === ORDER_KEY.NAME
-                    ? orderDirection === ORDER_DIRECTION.DEFAULT
-                      ? 'fa fa-sort-alpha-desc'
-                      : 'fa fa-sort-alpha-asc'
-                    : 'fa fa-sort-alpha-asc'
-                }
-              ></i>
+              <i className={'fa fa-sort-alpha-' + btnNameAscDesc}></i>
             </button>
           </h3>
           <ul>

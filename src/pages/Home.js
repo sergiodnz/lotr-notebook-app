@@ -1,12 +1,10 @@
 import React from 'react';
+import TituloPagina from '../componentes/TituloPagina';
 
 const Home = () => {
   return (
     <div>
-      <div className="page-title">
-        <h1>The Lord of The Rings</h1>
-        <h2>notebook app / movies / books</h2>
-      </div>
+      <TituloPagina titulo="Filmes / Books" />
     </div>
   );
 };
