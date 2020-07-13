@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-
 import Menu from './components/Menu';
+import Book from './pages/Book';
+import Books from './pages/Books';
 import Home from './pages/Home';
 import Movies from './pages/Movies';
-import Books from './pages/Books';
+import Review from './pages/Review';
 
 const App = () => {
   return (
@@ -18,7 +19,13 @@ const App = () => {
         <Route path="/movies">
           <Movies />
         </Route>
-        <Route path="/books">
+        <Route exact path="/books/:id/review">
+          <Review />
+        </Route>
+        <Route exact path="/books/:id">
+          <Book />
+        </Route>
+        <Route exact path="/books">
           <Books />
         </Route>
       </BrowserRouter>

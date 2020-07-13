@@ -10,7 +10,7 @@ const BookList = ({ title, books }) => {
           <li key={book._id} className="list-item">
             <div>
               <strong>
-                <Link to={`book/${book._id}`}>{book.name}</Link>
+                <Link to={`books/${book._id}`}>{book.name}</Link>
               </strong>
             </div>
             <div>Reviews: {book.reviews.length}</div>
