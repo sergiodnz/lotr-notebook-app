@@ -1,18 +1,13 @@
-import axios from 'axios';
-
-const headers = { Authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}` };
+import server from './config';
 
 export const getMovies = () => {
-  return axios
-    .get('http://localhost:5000/movies', { headers })
-    .then(response => response.data);
+  return server.get('movies').then(res => res.data);
 };
 
 export const updateMovies = (id, data) => {
-  return axios
-    .patch(`http://localhost:5000/movies/${id}`, data, { headers })
-    .then(response => {
-      console.log(response.data);
-      return response.data;
-    });
+  return server.patch(`movies/${id}`, data).then(res => res.data);
+};
+
+export const vote = (id, option) => {
+  return server.post(`movies/${id}/vote`, { option }).then(res => res.data);
 };

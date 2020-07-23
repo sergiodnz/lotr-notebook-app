@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getMovies, updateMovies } from '../api/filmes';
 import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
-import TituloPagina from '../componentes/TituloPagina';
+import PageContent from '../componentes/PageContent';
 
-class Movies extends Component {
-  state = { filmes: [] };
+const Movies = () => {
+  const [filmes, setFilmes] = useState([]);
 
-  componentDidMount() {
-    getMovies().then(filmes => this.setState({ filmes }));
-  }
+  useEffect(() => {
+    getMovies().then(filmes => setFilmes(filmes));
+  }, []);
 
-  atualizarFilme = (id, { bookmarked, watched }) => {
+  const atualizarFilme = (id, { bookmarked, watched }) => {
     updateMovies(id, { bookmarked, watched });
 
-    const filmes = this.state.filmes.map(filme => {
+    const filmesAtualizados = filmes.map(filme => {
       if (filme._id === id) {
         filme.bookmarked = bookmarked;
         filme.watched = watched;
@@ -21,39 +21,33 @@ class Movies extends Component {
       return filme;
     });
 
-    this.setState({ filmes });
+    setFilmes(filmesAtualizados);
   };
 
-  render() {
-    const { filmes } = this.state;
-
-    return (
+  return (
+    <PageContent name="Filmes">
       <div>
-        <TituloPagina titulo="Filmes" />
-        <div>
-          <ListaDeFilmes
-            titulo="Filmes"
-            filmes={filmes.filter(
-              filme => !(filme.watched || filme.bookmarked)
-            )}
-            atualizarFilme={this.atualizarFilme}
-            orderBy={ORDER_KEY.DEFAULT}
-          />
-          <ListaDeFilmes
-            titulo="Assistidos"
-            filmes={filmes.filter(filme => filme.watched)}
-            atualizarFilme={this.atualizarFilme}
-            orderBy={ORDER_KEY.NAME}
-          />
-          <ListaDeFilmes
-            titulo="Favoritos"
-            filmes={filmes.filter(filme => filme.bookmarked)}
-            atualizarFilme={this.atualizarFilme}
-            orderBy={ORDER_KEY.AWARDS}
-          />
-        </div>
+        <ListaDeFilmes
+          titulo="Filmes"
+          filmes={filmes.filter(filme => !(filme.watched || filme.bookmarked))}
+          atualizarFilme={atualizarFilme}
+          orderBy={ORDER_KEY.DEFAULT}
+        />
+        <ListaDeFilmes
+          titulo="Assistidos"
+          filmes={filmes.filter(filme => filme.watched)}
+          atualizarFilme={atualizarFilme}
+          order={ORDER_KEY.NAME}
+        />
+        <ListaDeFilmes
+          titulo="Favoritos"
+          filmes={filmes.filter(filme => filme.bookmarked)}
+          atualizarFilme={atualizarFilme}
+          order={ORDER_KEY.AWARDS}
+        />
       </div>
-    );
-  }
-}
+    </PageContent>
+  );
+};
+
 export default Movies;

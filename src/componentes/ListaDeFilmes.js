@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // cria enum para as chaves de ordenação disponíveis
 export const ORDER_KEY = {
@@ -7,146 +7,137 @@ export const ORDER_KEY = {
   NAME: 'name',
   DEFAULT: '_id',
 };
+
 // cria enum para multiplicador usado para mudar a direcao da ordenacao
 export const ORDER_DIRECTION = {
   DEFAULT: 1,
   REVERSE: -1,
 };
 
-class ListaDeFilmes extends Component {
+const ListaDeFilmes = ({ titulo, filmes, atualizarFilme, order }) => {
   // cria a lista com valores default para ordenacao
-  state = {
-    orderBy: ORDER_KEY.DEFAULT,
-    orderDirection: ORDER_DIRECTION.DEFAULT,
-  };
+  const [orderBy, setOrderBy] = useState(ORDER_KEY.DEFAULT);
+  const [orderDirection, setOrderDirection] = useState(ORDER_DIRECTION.DEFAULT);
 
   // Seta a ordenação oriunda do parametro do componente
-  componentDidMount() {
-    const { orderBy } = this.props;
-    this.setState({
-      orderBy,
-    });
-  }
+  useEffect(() => {
+    setOrderBy(order);
+  }, [order]);
+
   // metodo para ordenar a lista
-  obtemOrdenacaoLista = (b, a, orderBy) => {
-    const orderDirection = this.state.orderDirection;
-    switch (orderBy) {
+  const obtemOrdenacaoLista = (b, a, order, direction) => {
+    // const orderDirection = orderDirection;
+    switch (order) {
       case ORDER_KEY.AWARDS:
-        return (b[ORDER_KEY.AWARDS] - a[ORDER_KEY.AWARDS]) * orderDirection;
+        return (b[ORDER_KEY.AWARDS] - a[ORDER_KEY.AWARDS]) * direction;
       case ORDER_KEY.NAME:
-        return (
-          (a[ORDER_KEY.NAME] > b[ORDER_KEY.NAME] ? 1 : -1) * orderDirection
-        );
+        return (a[ORDER_KEY.NAME] > b[ORDER_KEY.NAME] ? 1 : -1) * direction;
       default:
         return ORDER_KEY.DEFAULT;
     }
   };
 
   // mudança de ordenação default ou reversa
-  mudaOrdenacao = orderBy => {
-    const orderDirection =
-      this.state.orderBy === orderBy
-        ? this.state.orderDirection * ORDER_DIRECTION.REVERSE
+  const mudaOrdenacao = order => {
+    const direction =
+      orderBy === order
+        ? orderDirection * ORDER_DIRECTION.REVERSE
         : ORDER_DIRECTION.DEFAULT;
-    this.setState({ orderBy, orderDirection });
+    setOrderBy(order);
+    setOrderDirection(direction);
   };
 
-  render() {
-    const { orderBy, orderDirection } = this.state;
+  //  const { titulo, filmes, atualizarFilme } = this.props;
 
-    const { titulo, filmes, atualizarFilme } = this.props;
+  const listaFilmes = filmes.slice().sort((a, b) => {
+    return obtemOrdenacaoLista(b, a, orderBy, orderDirection);
+  });
 
-    const listaFilmes = filmes.slice().sort((a, b) => {
-      return this.obtemOrdenacaoLista(b, a, orderBy);
-    });
-
-    const btnAwardsAscDesc =
-      orderBy === ORDER_KEY.AWARDS && orderDirection === ORDER_DIRECTION.DEFAULT
-        ? 'asc'
-        : 'desc';
-    const btnNameAscDesc = !(
-      orderBy === ORDER_KEY.NAME && orderDirection === ORDER_DIRECTION.DEFAULT
-    )
+  const btnAwardsAscDesc =
+    orderBy === ORDER_KEY.AWARDS && orderDirection === ORDER_DIRECTION.DEFAULT
       ? 'asc'
       : 'desc';
+  const btnNameAscDesc = !(
+    orderBy === ORDER_KEY.NAME && orderDirection === ORDER_DIRECTION.DEFAULT
+  )
+    ? 'asc'
+    : 'desc';
 
-    return (
-      <div>
-        <div className="movie-list">
-          <h3>
-            <span>{titulo}</span>
-            <button
-              className="sort-button"
-              onClick={() => this.mudaOrdenacao(ORDER_KEY.AWARDS)}
-            >
-              <i className={'fa fa-sort-amount-' + btnAwardsAscDesc}></i>
-            </button>
-            <button
-              className="sort-button"
-              onClick={() => this.mudaOrdenacao(ORDER_KEY.NAME)}
-            >
-              <i className={'fa fa-sort-alpha-' + btnNameAscDesc}></i>
-            </button>
-          </h3>
-          <ul>
-            {listaFilmes.map(movie => {
-              // constantes para exibir ou ocultar botoes de acordo com a lista a ser exibida
-              const showCancelar = movie.watched || movie.bookmarked;
-              const showAdicionar = !(movie.watched || movie.bookmarked);
-              return (
-                <li className="movie-list-item" key={movie._id}>
-                  <div>{movie.name}</div>
-                  <div>Academy Awards: {movie.academyAwardWins}</div>
-                  {showAdicionar && (
-                    <span>
-                      <button
-                        onClick={() =>
-                          atualizarFilme(movie._id, {
-                            bookmarked: true,
-                            watched: false,
-                          })
-                        }
-                      >
-                        <i className="fa fa-star"></i>
-                      </button>
-                    </span>
-                  )}
-                  {showAdicionar && (
-                    <span>
-                      <button
-                        onClick={() =>
-                          atualizarFilme(movie._id, {
-                            bookmarked: false,
-                            watched: true,
-                          })
-                        }
-                      >
-                        <i className="fa fa-check"></i>
-                      </button>
-                    </span>
-                  )}
-                  {showCancelar && (
-                    <span>
-                      <button
-                        onClick={() =>
-                          atualizarFilme(movie._id, {
-                            bookmarked: false,
-                            watched: false,
-                          })
-                        }
-                      >
-                        <i className="fa fa-times"></i>
-                      </button>
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+  return (
+    <div>
+      <div className="movie-list">
+        <h3>{titulo}</h3>
+        <button
+          className="sort-button"
+          onClick={() => mudaOrdenacao(ORDER_KEY.AWARDS)}
+        >
+          <i className={'fa fa-sort-amount-' + btnAwardsAscDesc}></i>
+        </button>
+        <button
+          className="sort-button"
+          onClick={() => mudaOrdenacao(ORDER_KEY.NAME)}
+        >
+          <i className={'fa fa-sort-alpha-' + btnNameAscDesc}></i>
+        </button>
+
+        <ul>
+          {listaFilmes.map(movie => {
+            // constantes para exibir ou ocultar botoes de acordo com a lista a ser exibida
+            const showCancelar = movie.watched || movie.bookmarked;
+            const showAdicionar = !(movie.watched || movie.bookmarked);
+            return (
+              <li className="movie-list-item" key={movie._id}>
+                <div>{movie.name}</div>
+                <div>Academy Awards: {movie.academyAwardWins}</div>
+                {showAdicionar && (
+                  <span>
+                    <button
+                      onClick={() =>
+                        atualizarFilme(movie._id, {
+                          bookmarked: true,
+                          watched: false,
+                        })
+                      }
+                    >
+                      <i className="fa fa-star"></i>
+                    </button>
+                  </span>
+                )}
+                {showAdicionar && (
+                  <span>
+                    <button
+                      onClick={() =>
+                        atualizarFilme(movie._id, {
+                          bookmarked: false,
+                          watched: true,
+                        })
+                      }
+                    >
+                      <i className="fa fa-check"></i>
+                    </button>
+                  </span>
+                )}
+                {showCancelar && (
+                  <span>
+                    <button
+                      onClick={() =>
+                        atualizarFilme(movie._id, {
+                          bookmarked: false,
+                          watched: false,
+                        })
+                      }
+                    >
+                      <i className="fa fa-times"></i>
+                    </button>
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default ListaDeFilmes;
