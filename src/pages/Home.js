@@ -1,51 +1,38 @@
-import React, { Component } from 'react';
-import { getMovies, updateMovies } from '../api/filmes';
+import React, { useEffect, useState } from 'react';
+import { getMovies } from '../api/filmes';
 import { getBooks } from '../api/livros';
 import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
 import ListaDeLivros from '../componentes/ListaDeLivros';
 import PageContent from '../componentes/PageContent';
 
-class Home extends Component {
-  state = { filmes: [], livros: [] };
+const Home = () => {
+  const [filmes, setFilmes] = useState([]);
+  const [livros, setLivros] = useState([]);
 
-  componentDidMount() {
-    getMovies().then(filmes => this.setState({ filmes }));
-    getBooks().then(books => this.setState({ livros: books }));
-  }
+  useEffect(() => {
+    getMovies().then(filmes => setFilmes(filmes));
+    getBooks().then(books => setLivros(books));
+  }, []);
 
-  atualizarFilme = (id, { bookmarked, watched }) => {
-    updateMovies(id, { bookmarked, watched });
-
-    const filmes = this.state.filmes.map(filme => {
-      if (filme._id === id) {
-        filme.bookmarked = bookmarked;
-        filme.watched = watched;
-      }
-      return filme;
-    });
-
-    this.setState({ filmes });
-  };
-
-  render() {
-    const { filmes, livros } = this.state;
-
-    return (
-      <PageContent name="Filmes / Livros / Personagens">
-        <div>
-          <ListaDeFilmes
-            titulo="Favoritos"
-            filmes={filmes.filter(filme => filme.bookmarked)}
-            atualizarFilme={this.atualizarFilme}
-            orderBy={ORDER_KEY.AWARDS}
-          />
-        </div>
-        <div>
-          <ListaDeLivros titulo="Livros" livros={livros} />
-        </div>
-      </PageContent>
-    );
-  }
-}
+  return (
+    <PageContent name="Filmes / Livros / Personagens">
+      <div>
+        <ListaDeFilmes
+          titulo="Favoritos"
+          filmes={filmes.filter(filme => filme.bookmarked)}
+          orderBy={ORDER_KEY.AWARDS}
+        />
+      </div>
+      <div>
+        <ListaDeLivros
+          titulo="Livros"
+          livros={livros.filter(
+            livro => livro.reviews && livro.reviews.length > 0
+          )}
+        />
+      </div>
+    </PageContent>
+  );
+};
 
 export default Home;
