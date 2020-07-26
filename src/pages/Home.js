@@ -4,6 +4,7 @@ import { getBooks } from '../api/livros';
 import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
 import ListaDeLivros from '../componentes/ListaDeLivros';
 import PageContent from '../componentes/PageContent';
+import ListaPersonagens from '../componentes/ListaPersonagens';
 
 const Home = () => {
   const [filmes, setFilmes] = useState([]);
@@ -16,6 +17,9 @@ const Home = () => {
 
   return (
     <PageContent name="Filmes / Livros / Personagens">
+      <div>
+        <ListaPersonagens />
+      </div>
       <div>
         <ListaDeFilmes
           titulo="Favoritos"

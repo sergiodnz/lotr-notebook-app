@@ -7,3 +7,9 @@ export const searchCharacter = name => {
 export const getCharacter = id => {
   return server.get(`/characters/${id}`).then(res => res.data);
 };
+
+export const getCharacters = (page, limit) => {
+  return server
+    .get(`/characters?page=${page}&limit=${limit}`)
+    .then(res => res.data);
+};

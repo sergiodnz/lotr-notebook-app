@@ -6,25 +6,22 @@ import PageContent from '../componentes/PageContent';
 const DetalhePersonagem = () => {
   const { id } = useParams();
   const [personagem, setPersonagem] = useState({});
-  const [encontrado, setEncontrado] = useState(false);
-  const [exibeDiv, setExibeDiv] = useState(false);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     getCharacter(id)
       .then(personagem => {
         if (personagem) {
           setPersonagem(personagem);
-          setEncontrado(true);
         }
       })
-      .catch(setEncontrado(false))
-      .finally(setExibeDiv(true));
+      .finally(() => setCarregando(false));
   }, [id]);
 
   return (
     <PageContent name="Personagens">
       <div>
-        {exibeDiv && encontrado && (
+        {personagem._id ? (
           <div>
             <div>
               <span>
@@ -107,9 +104,10 @@ const DetalhePersonagem = () => {
               </div>
             )}
           </div>
-        )}
-        {!encontrado && exibeDiv && (
-          <div>Personagem com o identificador {id} Não foi encontrado!</div>
+        ) : (
+          !carregando && (
+            <div>Personagem com o identificador {id} Não foi encontrado!</div>
+          )
         )}
       </div>
     </PageContent>

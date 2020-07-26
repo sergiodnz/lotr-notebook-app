@@ -24,6 +24,7 @@ const Personagens = () => {
         </Debounce>
       </div>
       <div>
+        <h5>{personagens.length} personagen(s) encontrado(s)</h5>
         <ul>
           {personagens &&
             personagens.map(personagem => (
