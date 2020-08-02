@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { getMovies } from '../api/filmes';
-import { getBooks } from '../api/livros';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
 import ListaDeLivros from '../componentes/ListaDeLivros';
-import PageContent from '../componentes/PageContent';
 import ListaPersonagens from '../componentes/ListaPersonagens';
+import PageContent from '../componentes/PageContent';
 
 const Home = () => {
-  const [filmes, setFilmes] = useState([]);
-  const [livros, setLivros] = useState([]);
-
-  useEffect(() => {
-    getMovies().then(filmes => setFilmes(filmes));
-    getBooks().then(books => setLivros(books));
-  }, []);
+  const filmes = useSelector(state => state.movies);
 
   return (
     <PageContent name="Filmes / Livros / Personagens">
@@ -30,9 +23,7 @@ const Home = () => {
       <div>
         <ListaDeLivros
           titulo="Livros"
-          livros={livros.filter(
-            livro => livro.reviews && livro.reviews.length > 0
-          )}
+          filterBy={livro => livro.reviews && livro.reviews.length > 0}
         />
       </div>
     </PageContent>

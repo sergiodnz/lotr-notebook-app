@@ -1,5 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateMovies } from '../api/filmes';
+import { atualizarFilme } from '../action/movies';
 
 // cria enum para as chaves de ordenação disponíveis
 export const ORDER_KEY = {
@@ -14,7 +17,15 @@ export const ORDER_DIRECTION = {
   REVERSE: -1,
 };
 
-const ListaDeFilmes = ({ titulo, filmes, atualizarFilme, order }) => {
+const ListaDeFilmes = ({ titulo, filmes, order }) => {
+  const dispatch = useDispatch();
+
+  const atualizar = (id, { bookmarked, watched }) => {
+    updateMovies(id, { bookmarked, watched }).then(movie => {
+      dispatch(atualizarFilme(movie));
+    });
+  };
+
   // cria a lista com valores default para ordenacao
   const [orderBy, setOrderBy] = useState(ORDER_KEY.DEFAULT);
   const [orderDirection, setOrderDirection] = useState(ORDER_DIRECTION.DEFAULT);
@@ -93,7 +104,7 @@ const ListaDeFilmes = ({ titulo, filmes, atualizarFilme, order }) => {
                   <span>
                     <button
                       onClick={() =>
-                        atualizarFilme(movie._id, {
+                        atualizar(movie._id, {
                           bookmarked: true,
                           watched: false,
                         })
@@ -107,7 +118,7 @@ const ListaDeFilmes = ({ titulo, filmes, atualizarFilme, order }) => {
                   <span>
                     <button
                       onClick={() =>
-                        atualizarFilme(movie._id, {
+                        atualizar(movie._id, {
                           bookmarked: false,
                           watched: true,
                         })
@@ -121,7 +132,7 @@ const ListaDeFilmes = ({ titulo, filmes, atualizarFilme, order }) => {
                   <span>
                     <button
                       onClick={() =>
-                        atualizarFilme(movie._id, {
+                        atualizar(movie._id, {
                           bookmarked: false,
                           watched: false,
                         })

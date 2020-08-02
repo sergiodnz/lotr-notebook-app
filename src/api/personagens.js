@@ -1,4 +1,4 @@
-import server from './config';
+import server from '../config/server';
 
 export const searchCharacter = name => {
   return server.get(`/characters/name/${name}`).then(res => res.data);
@@ -8,8 +8,11 @@ export const getCharacter = id => {
   return server.get(`/characters/${id}`).then(res => res.data);
 };
 
-export const getCharacters = (page, limit) => {
+export const obtemPersonagens = (numeroPagina, limite) => {
+  console.log({ numeroPagina, limite });
   return server
-    .get(`/characters?page=${page}&limit=${limit}`)
-    .then(res => res.data);
+    .get(`/characters?page=${numeroPagina}&limit=${limite}`)
+    .then(res => {
+      return res.data;
+    });
 };

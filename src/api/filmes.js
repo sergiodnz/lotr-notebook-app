@@ -1,4 +1,4 @@
-import server from './config';
+import server from '../config/server';
 
 export const getMovies = () => {
   return server.get('movies').then(res => res.data);

@@ -1,85 +1,89 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBook, addReview, updateReview, deleteReview } from '../api/livros';
+import * as ApiLivros from '../api/livros';
 import PageContent from '../componentes/PageContent';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  adicionaRevisao,
+  atualizaRevisao,
+  apagaRevisao,
+} from '../action/livros';
 
 const DetalheLivro = () => {
   const { id } = useParams();
-  const [idBook, setIdBook] = useState(0);
-  const [name, setName] = useState('');
-  const [reviews, setReviews] = useState([]);
-  const [_id, set_id] = useState(0);
-  const [author, setAuthor] = useState('');
-  const [text, setText] = useState('');
-  const [stars, setStars] = useState(0);
-  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    getBook(id).then(book => {
-      if (book) {
-        setIdBook(book._id);
-        setName(book.name);
-        setReviews(book.reviews);
-      }
-    });
-  }, [id]);
+  const { livro, revisoes } = useSelector(state => {
+    const livro = state.livros.find(livro => livro._id === id);
+    return { livro, revisoes: livro.reviews ? livro.reviews : [] };
+  });
 
-  const toggleForm = () => {
-    setShowForm(!showForm);
+  const dispatch = useDispatch();
+
+  //controle do formulário
+  const [idRevisao, setIdRevisao] = useState(0);
+  const [autor, setAutor] = useState('');
+  const [texto, setTexto] = useState('');
+  const [estrelas, setEstrelas] = useState(0);
+  const [exibirFormulario, setExibirFormulario] = useState(false);
+
+  const alternarFormulario = () => {
+    setExibirFormulario(!exibirFormulario);
   };
 
-  const handleChangeText = event => {
-    setText(event.target.value);
+  const alterarTexto = event => {
+    setTexto(event.target.value);
   };
 
-  const handleChangeStars = event => {
-    const value = parseInt(event.target.value);
-    if (value >= 0 && value <= 5) {
-      setStars(value);
+  const alterarEstrelas = event => {
+    const valor = parseInt(event.target.value);
+    if (valor >= 0 && valor <= 5) {
+      setEstrelas(valor);
     }
   };
 
-  const handleChangeAuthor = event => {
-    setAuthor(event.target.value);
+  const alterarAutor = event => {
+    setAutor(event.target.value);
   };
 
-  const handleEditReview = review => {
-    set_id(review._id);
-    setAuthor(review.author);
-    setStars(review.stars);
-    setText(review.text);
-    setShowForm(true);
+  const editar = review => {
+    setIdRevisao(review._id);
+    setAutor(review.author);
+    setEstrelas(review.stars);
+    setTexto(review.text);
+    setExibirFormulario(true);
   };
 
-  const handleDeleteReview = idReview => {
-    deleteReview(idBook, idReview).then(res => {
-      const updatedReviews = reviews.filter(
-        review => review._id !== res.deleted
-      );
-      setReviews(updatedReviews);
+  const apagar = idRevisaoApagar => {
+    ApiLivros.apagarRevisao(livro._id, idRevisaoApagar).then(retorno => {
+      dispatch(apagaRevisao(livro._id, idRevisaoApagar));
     });
   };
 
-  const submitForm = event => {
+  const atualizaRevisoesPagina = revisaoAtualizado => {
+    setIdRevisao(0);
+    setAutor('');
+    setEstrelas(0);
+    setTexto('');
+    setExibirFormulario(false);
+  };
+
+  const enviar = event => {
+    const revisao = {
+      _id: idRevisao,
+      author: autor,
+      text: texto,
+      stars: estrelas,
+    };
     event.preventDefault();
-    if (_id) {
-      updateReview(idBook, { _id, author, text, stars }).then(r => {
-        const updatedReviews = reviews.filter(review => review._id !== _id);
-        setReviews([r].concat(updatedReviews));
-        set_id(0);
-        setAuthor('');
-        setStars(0);
-        setText('');
-        setShowForm(false);
+    if (idRevisao) {
+      ApiLivros.atualizarRevisao(livro._id, revisao).then(revisao => {
+        dispatch(atualizaRevisao(livro._id, revisao));
+        atualizaRevisoesPagina(revisao);
       });
     } else {
-      addReview(idBook, { author, text, stars }).then(r => {
-        setReviews([r].concat(reviews));
-        set_id(0);
-        setAuthor('');
-        setStars(0);
-        setText('');
-        setShowForm(false);
+      ApiLivros.adicionarRevisao(livro._id, revisao).then(revisao => {
+        dispatch(adicionaRevisao(livro._id, revisao));
+        atualizaRevisoesPagina(revisao);
       });
     }
   };
@@ -89,85 +93,88 @@ const DetalheLivro = () => {
       <div className="movie-list-item">
         <div>
           <span>
-            Title: <strong>{name}</strong>
+            Título: <strong>{livro && livro.name}</strong>
           </span>
         </div>
         <div>
           <span>
-            Reviews: <strong>{reviews.length}</strong>
+            Revisões: <strong>{revisoes ? revisoes.length : 0}</strong>
           </span>
         </div>
         <div>
           <span>
-            <button onClick={toggleForm}>Add Review</button>
+            <button onClick={alternarFormulario}>
+              {exibirFormulario ? 'Cancelar' : 'Adicionar'}
+            </button>
           </span>
         </div>
-        {showForm && (
+        {exibirFormulario && (
           <div>
             <hr />
-            <form onSubmit={submitForm}>
+            <form onSubmit={enviar}>
               <div>
-                <span>Name:</span>
+                <span>Nome:</span>
                 <input
                   type="text"
                   name="author"
-                  value={author}
-                  onChange={handleChangeAuthor}
+                  value={autor}
+                  onChange={alterarAutor}
                 />
               </div>
               <div>
-                <span>Stars:</span>
+                <span>Estrelas:</span>
                 <input
                   type="number"
                   name="stars"
-                  value={stars}
-                  onChange={handleChangeStars}
+                  value={estrelas}
+                  onChange={alterarEstrelas}
                 />
               </div>
               <div>
-                <span>Review:</span>
+                <span>Revisão:</span>
                 <textarea
                   rows={10}
                   name="text"
-                  value={text}
-                  onChange={handleChangeText}
+                  value={texto}
+                  onChange={alterarTexto}
                 />
               </div>
               <div>
-                <button type="submit">Save</button>
+                <button type="submit">Enviar</button>
               </div>
             </form>
           </div>
         )}
         <div>
-          {reviews.map(review => (
-            <div key={review._id}>
-              <hr />
-              <div>
-                <i className="fa fa-star"></i>
-                <span>&nbsp;{review.stars}</span>
+          {revisoes &&
+            revisoes.map(revisao => (
+              <div key={revisao._id}>
+                <hr />
+                <div>
+                  <i className="fa fa-star"></i>
+                  <span>&nbsp;{revisao.stars}</span>
+                </div>
+                <div>
+                  <span>
+                    <strong>Autor: </strong>
+                    {revisao.author}
+                  </span>
+                </div>
+                <div>
+                  <span>
+                    <strong>Revisao: </strong> {revisao.text}
+                  </span>
+                </div>
+                <div>
+                  <button onClick={() => editar(revisao)}>
+                    <i className="fa fa-edit"></i>
+                  </button>
+                  <button onClick={() => apagar(revisao._id)}>
+                    <i className="fa fa-eraser"></i>
+                  </button>
+                </div>
               </div>
-              <div>
-                <span>
-                  <strong>Author: </strong>
-                  {review.author}
-                </span>
-              </div>
-              <div>
-                <span>
-                  <strong>Review: </strong> {review.text}
-                </span>
-              </div>
-              <div>
-                <button onClick={() => handleEditReview(review)}>
-                  <i className="fa fa-edit"></i>
-                </button>
-                <button onClick={() => handleDeleteReview(review._id)}>
-                  <i className="fa fa-eraser"></i>
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
         <hr />
       </div>

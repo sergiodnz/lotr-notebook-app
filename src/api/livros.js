@@ -1,28 +1,28 @@
-import server from './config';
+import server from '../config/server';
 
-export const getBooks = () => {
+export const obterLivros = () => {
   return server.get('books').then(res => res.data);
 };
 
-export const getBook = id => {
+export const obterLivro = id => {
   return server.get(`books/${id}`).then(res => res.data);
 };
 
-export const addReview = (idBook, review) => {
-  console.log(review);
-  return server.post(`books/${idBook}/reviews`, review).then(res => res.data);
+export const adicionarRevisao = (idLivro, revisao) => {
+  return server.post(`books/${idLivro}/reviews`, revisao).then(res => {
+    console.log(res.data);
+    return res.data;
+  });
 };
 
-export const deleteReview = (idBook, idReview) => {
-  console.log({ idBook, idReview });
+export const apagarRevisao = (idLivro, idRevisao) => {
   return server
-    .delete(`books/${idBook}/reviews/${idReview}`)
+    .delete(`books/${idLivro}/reviews/${idRevisao}`)
     .then(res => res.data);
 };
 
-export const updateReview = (idBook, review) => {
-  console.log(review);
+export const atualizarRevisao = (idLivro, revisao) => {
   return server
-    .put(`books/${idBook}/reviews/${review._id}`, review)
+    .put(`books/${idLivro}/reviews/${revisao._id}`, revisao)
     .then(res => res.data);
 };
