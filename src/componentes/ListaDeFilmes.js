@@ -1,7 +1,5 @@
-/* eslint-disable no-template-curly-in-string */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateMovies } from '../api/filmes';
 import { atualizarFilme } from '../action/movies';
 
 // cria enum para as chaves de ordenação disponíveis
@@ -20,10 +18,8 @@ export const ORDER_DIRECTION = {
 const ListaDeFilmes = ({ titulo, filmes, order }) => {
   const dispatch = useDispatch();
 
-  const atualizar = (id, { bookmarked, watched }) => {
-    updateMovies(id, { bookmarked, watched }).then(movie => {
-      dispatch(atualizarFilme(movie));
-    });
+  const atualizar = (_id, { bookmarked, watched }) => {
+    dispatch(atualizarFilme({ _id, bookmarked, watched }));
   };
 
   // cria a lista com valores default para ordenacao

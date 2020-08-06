@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { carregarPagina } from '../action/personagens';
-import * as ApiPersonagens from '../api/personagens';
+// import * as ApiPersonagens from '../api/personagens';
 import Paginacao from './Paginacao';
 import { Link } from 'react-router-dom';
 
@@ -20,13 +20,7 @@ const ListaPersonagens = () => {
   const [carregando, setCarregando] = useState(false);
 
   const recarregaPagina = (numero, limite) => {
-    ApiPersonagens.obtemPersonagens(numero, limite)
-      .then(data => {
-        dispatch(carregarPagina(data));
-      })
-      .finally(() => {
-        setCarregando(false);
-      });
+    dispatch(carregarPagina({ page: numero, limit: limite }));
   };
 
   const alteraLimite = value => {

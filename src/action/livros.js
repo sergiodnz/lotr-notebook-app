@@ -1,3 +1,4 @@
+import * as ApiLivros from '../api/livros';
 export const LIVROS = {
   CARREGAR: 'CARREGAR_LIVROS',
   ATUALIZA_REVISAO: 'ATUALIZA_REVISAO',
@@ -5,18 +6,41 @@ export const LIVROS = {
   APAGA_REVISAO: 'APAGA_REVISAO',
 };
 
-export const carregarLivros = livros => {
+const carregar = livros => {
   return { type: LIVROS.CARREGAR, livros };
 };
 
-export const adicionaRevisao = (idLivro, revisao) => {
-  return { type: LIVROS.ADICIONA_REVISAO, idLivro, revisao };
+const adicionar = revisao => {
+  return { type: LIVROS.ADICIONA_REVISAO, revisao };
 };
 
-export const atualizaRevisao = (idLivro, revisao) => {
-  return { type: LIVROS.ATUALIZA_REVISAO, idLivro, revisao };
+const apagar = (bookId, deletedId) => {
+  return { type: LIVROS.APAGA_REVISAO, bookId, deletedId };
 };
 
-export const apagaRevisao = (idLivro, idRevisao) => {
-  return { type: LIVROS.APAGA_REVISAO, idLivro, idRevisao };
+const atualizar = revisao => {
+  return { type: LIVROS.ATUALIZA_REVISAO, revisao };
+};
+
+export const carregarLivros = () => dispatch => {
+  ApiLivros.obterLivros().then(livros => dispatch(carregar(livros)));
+};
+
+export const adicionarRevisao = revisaoNova => dispatch => {
+  ApiLivros.adicionarRevisao(revisaoNova).then(revisao => {
+    console.log(revisao);
+    dispatch(adicionar(revisao));
+  });
+};
+
+export const atualizarRevisao = revisaoAtualizada => dispatch => {
+  ApiLivros.atualizarRevisao(revisaoAtualizada).then(revisao => {
+    dispatch(atualizar(revisao));
+  });
+};
+
+export const apagarRevisao = revisao => dispatch => {
+  ApiLivros.apagarRevisao(revisao).then(data => {
+    dispatch(apagar(revisao.bookId, data.deleted));
+  });
 };

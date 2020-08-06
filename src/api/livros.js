@@ -8,21 +8,20 @@ export const obterLivro = id => {
   return server.get(`books/${id}`).then(res => res.data);
 };
 
-export const adicionarRevisao = (idLivro, revisao) => {
-  return server.post(`books/${idLivro}/reviews`, revisao).then(res => {
-    console.log(res.data);
+export const adicionarRevisao = revisao => {
+  return server.post(`books/${revisao.bookId}/reviews`, revisao).then(res => {
     return res.data;
   });
 };
 
-export const apagarRevisao = (idLivro, idRevisao) => {
+export const apagarRevisao = revisao => {
   return server
-    .delete(`books/${idLivro}/reviews/${idRevisao}`)
+    .delete(`books/${revisao.bookId}/reviews/${revisao._id}`)
     .then(res => res.data);
 };
 
-export const atualizarRevisao = (idLivro, revisao) => {
+export const atualizarRevisao = revisao => {
   return server
-    .put(`books/${idLivro}/reviews/${revisao._id}`, revisao)
+    .put(`books/${revisao.bookId}/reviews/${revisao._id}`, revisao)
     .then(res => res.data);
 };

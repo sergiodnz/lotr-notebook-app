@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import * as ApiLivros from '../api/livros';
 import PageContent from '../componentes/PageContent';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  adicionaRevisao,
-  atualizaRevisao,
-  apagaRevisao,
+  adicionarRevisao,
+  atualizarRevisao,
+  apagarRevisao,
 } from '../action/livros';
 
 const DetalheLivro = () => {
@@ -14,7 +13,7 @@ const DetalheLivro = () => {
 
   const { livro, revisoes } = useSelector(state => {
     const livro = state.livros.find(livro => livro._id === id);
-    return { livro, revisoes: livro.reviews ? livro.reviews : [] };
+    return { livro, revisoes: livro ? livro.reviews : [] };
   });
 
   const dispatch = useDispatch();
@@ -53,10 +52,8 @@ const DetalheLivro = () => {
     setExibirFormulario(true);
   };
 
-  const apagar = idRevisaoApagar => {
-    ApiLivros.apagarRevisao(livro._id, idRevisaoApagar).then(retorno => {
-      dispatch(apagaRevisao(livro._id, idRevisaoApagar));
-    });
+  const apagar = _id => {
+    dispatch(apagarRevisao({ _id, bookId: livro._id }));
   };
 
   const atualizaRevisoesPagina = revisaoAtualizado => {
@@ -73,19 +70,15 @@ const DetalheLivro = () => {
       author: autor,
       text: texto,
       stars: estrelas,
+      bookId: livro._id,
     };
     event.preventDefault();
     if (idRevisao) {
-      ApiLivros.atualizarRevisao(livro._id, revisao).then(revisao => {
-        dispatch(atualizaRevisao(livro._id, revisao));
-        atualizaRevisoesPagina(revisao);
-      });
+      dispatch(atualizarRevisao(revisao));
     } else {
-      ApiLivros.adicionarRevisao(livro._id, revisao).then(revisao => {
-        dispatch(adicionaRevisao(livro._id, revisao));
-        atualizaRevisoesPagina(revisao);
-      });
+      dispatch(adicionarRevisao(revisao));
     }
+    atualizaRevisoesPagina(revisao);
   };
 
   return (

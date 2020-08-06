@@ -7,7 +7,7 @@ const livros = (state = [], action) => {
 
     case LIVROS.ADICIONA_REVISAO:
       return state.map(livro =>
-        livro._id === action.idLivro
+        livro._id === action.revisao.bookId
           ? {
               _id: livro._id,
               name: livro.name,
@@ -18,7 +18,7 @@ const livros = (state = [], action) => {
 
     case LIVROS.ATUALIZA_REVISAO:
       return state.map(livro =>
-        livro._id === action.idLivro
+        livro._id === action.revisao.bookId
           ? {
               _id: livro._id,
               name: livro.name,
@@ -29,15 +29,16 @@ const livros = (state = [], action) => {
           : livro
       );
     case LIVROS.APAGA_REVISAO:
-      const novoEstado = state.map(livro =>
-        livro._id === action.idLivro
+      const novoEstado = state.map(livro => {
+        console.log(action);
+        return livro._id === action.bookId
           ? {
               _id: livro._id,
               name: livro.name,
-              reviews: livro.reviews.filter(r => r._id !== action.idRevisao),
+              reviews: livro.reviews.filter(r => r._id !== action.deletedId),
             }
-          : livro
-      );
+          : livro;
+      });
       return novoEstado;
     default:
       return state;
