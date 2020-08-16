@@ -1,35 +1,31 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
+import PageContent from '../componentes/PageContent';
 
-import MovieList from '../components/MovieList';
-import PageTitle from '../components/PageTitle';
-
-const Movies = ({ allMovies, onResetMovie, onUpdateMovie }) => {
-  const watched = allMovies.filter(movie => movie.watched);
-  const bookmarked = allMovies.filter(movie => movie.bookmarked);
-  const movies = allMovies.filter(movie => !movie.watched && !movie.bookmarked);
+const Movies = () => {
+  const filmes = useSelector(state => state.movies);
 
   return (
-    <div>
-      <PageTitle title="The Lord of The Rings" path="movies" />
-      <MovieList
-        title="Movies"
-        movies={movies}
-        onUpdateMovie={onUpdateMovie}
-        onResetMovie={onResetMovie}
-      />
-      <MovieList
-        title="Watched"
-        movies={watched}
-        onUpdateMovie={onUpdateMovie}
-        onResetMovie={onResetMovie}
-      />
-      <MovieList
-        title="Bookmarked"
-        movies={bookmarked}
-        onUpdateMovie={onUpdateMovie}
-        onResetMovie={onResetMovie}
-      />
-    </div>
+    <PageContent name="Filmes">
+      <div>
+        <ListaDeFilmes
+          titulo="Filmes"
+          filmes={filmes.filter(filme => !(filme.watched || filme.bookmarked))}
+          orderBy={ORDER_KEY.DEFAULT}
+        />
+        <ListaDeFilmes
+          titulo="Assistidos"
+          filmes={filmes.filter(filme => filme.watched)}
+          order={ORDER_KEY.NAME}
+        />
+        <ListaDeFilmes
+          titulo="Favoritos"
+          filmes={filmes.filter(filme => filme.bookmarked)}
+          order={ORDER_KEY.AWARDS}
+        />
+      </div>
+    </PageContent>
   );
 };
 

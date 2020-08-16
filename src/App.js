@@ -1,48 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-
-import * as API from './api/movies';
-
-import Menu from './components/Menu';
-import Home from './pages/Home';
-import Movies from './pages/Movies';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { carregarLivros } from './action/livros';
+import { carregarPagina } from './action/personagens';
+import { carregarFilmes } from './action/movies';
+import Opcoes from './componentes/Opcoes';
+import Rotas from './componentes/Rotas';
 
 const App = () => {
-  const [allMovies, setAllMovies] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    API.getAllMovies().then(data => setAllMovies(data));
-  }, []);
-
-  const updateMovie = (id, callback) => {
-    const movies = allMovies.map(movie =>
-      movie._id === id ? callback(movie) : movie
-    );
-    setAllMovies(movies);
-  };
-
-  const handleUpdateMovie = (id, shelf) => {
-    updateMovie(id, movie => ({ ...movie, [shelf]: true }));
-  };
-
-  const handleResetMovie = id => {
-    updateMovie(id, movie => ({ ...movie, bookmarked: false, watched: false }));
-  };
+    dispatch(carregarLivros());
+    dispatch(carregarFilmes());
+    dispatch(carregarPagina({ page: 0, limit: 10 }));
+  }, [dispatch]);
 
   return (
     <div className="app">
       <BrowserRouter>
-        <Menu />
-        <Route exact path="/">
-          <Home movies={allMovies} onResetMovie={handleResetMovie} />
-        </Route>
-        <Route path="/movies">
-          <Movies
-            allMovies={allMovies}
-            onResetMovie={handleResetMovie}
-            onUpdateMovie={handleUpdateMovie}
-          />
-        </Route>
+        <Opcoes />
+        <Rotas />
       </BrowserRouter>
     </div>
   );

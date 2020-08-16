@@ -1,18 +1,32 @@
 import React from 'react';
-import MovieList from '../components/MovieList';
-import PageTitle from '../components/PageTitle';
+import { useSelector } from 'react-redux';
+import ListaDeFilmes, { ORDER_KEY } from '../componentes/ListaDeFilmes';
+import ListaDeLivros from '../componentes/ListaDeLivros';
+import ListaPersonagens from '../componentes/ListaPersonagens';
+import PageContent from '../componentes/PageContent';
 
-const Home = ({ movies, onResetMovie }) => {
-  const bookmarkedMovies = movies.filter(movie => movie.bookmarked);
+const Home = () => {
+  const filmes = useSelector(state => state.movies);
+
   return (
-    <div>
-      <PageTitle title="The Lord of The Rings" path="" />
-      <MovieList
-        title="Bookmarked Movies"
-        movies={bookmarkedMovies}
-        onResetMovie={onResetMovie}
-      />
-    </div>
+    <PageContent name="Filmes / Livros / Personagens">
+      <div>
+        <ListaPersonagens />
+      </div>
+      <div>
+        <ListaDeFilmes
+          titulo="Favoritos"
+          filmes={filmes.filter(filme => filme.bookmarked)}
+          orderBy={ORDER_KEY.AWARDS}
+        />
+      </div>
+      <div>
+        <ListaDeLivros
+          titulo="Livros"
+          filterBy={livro => livro.reviews && livro.reviews.length > 0}
+        />
+      </div>
+    </PageContent>
   );
 };
 
