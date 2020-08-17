@@ -1,11 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Livros from '../pages/Livros';
-import DetalheLivro from '../pages/DetalheLivro';
 import Home from '../pages/Home';
+import Livros from '../pages/Livros';
 import Movies from '../pages/Movies';
 import Personagens from '../pages/Personagens';
-import DetalhePersonagem from '../pages/DetalhePersonagem';
 
 const Rotas = () => {
   return (
@@ -17,13 +15,13 @@ const Rotas = () => {
         <Movies />
       </Route>
       <Route path="/livros/:id">
-        <DetalheLivro />
+        <Livros />
       </Route>
       <Route path="/livros">
         <Livros />
       </Route>
       <Route path="/personagens/:id">
-        <DetalhePersonagem />
+        <Personagens />
       </Route>
       <Route path="/personagens">
         <Personagens />

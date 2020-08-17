@@ -1,25 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { carregarLivros } from './action/livros';
-import { carregarPagina } from './action/personagens';
-import { carregarFilmes } from './action/movies';
-import Opcoes from './componentes/Opcoes';
 import Rotas from './componentes/Rotas';
+import Cabecalho from './Cabecalho';
 
 const App = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(carregarLivros());
-    dispatch(carregarFilmes());
-    dispatch(carregarPagina({ page: 0, limit: 10 }));
-  }, [dispatch]);
-
   return (
     <div className="app">
       <BrowserRouter>
-        <Opcoes />
+        <Cabecalho name="The Lord of The Rings" />
         <Rotas />
       </BrowserRouter>
     </div>

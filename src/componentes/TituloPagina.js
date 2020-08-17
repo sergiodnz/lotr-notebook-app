@@ -1,12 +1,20 @@
 import React from 'react';
+import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { MenuIcon } from '@material-ui/icons/Menu';
 
 const TituloPagina = props => {
   const { titulo } = props;
   return (
-    <div className="page-title">
-      <h1>The Lord of The Rings</h1>
-      <h2>notebook app / {titulo}</h2>
-    </div>
+    <AppBar position="static">
+      <Toolbar variant="dense">
+        <IconButton edge="start" color="inherit" aria-label="menu">
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" color="inherit">
+          The Lord of The Rings [notebook app / {titulo}]
+        </Typography>
+      </Toolbar>
+    </AppBar>
   );
 };
 

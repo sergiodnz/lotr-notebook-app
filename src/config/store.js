@@ -1,10 +1,7 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import livros from '../reducer/livros';
-import movies from '../reducer/movies';
-import pagina from '../reducer/personagens';
 
-const reducers = combineReducers({ livros, movies, pagina });
+const reducers = combineReducers({});
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
