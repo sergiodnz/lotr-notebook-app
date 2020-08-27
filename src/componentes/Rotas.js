@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Home from '../pages/Home';
 import Livros from '../pages/Livros';
 import Movies from '../pages/Movies';
-import Personagens from '../pages/Personagens';
+import Personagens from '../componentes/BuscaPersonagem';
 
 const Rotas = () => {
   return (

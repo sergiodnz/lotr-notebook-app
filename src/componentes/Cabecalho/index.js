@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import Opcoes from '../componentes/Opcoes';
+import Opcoes from '../Opcoes';
 
 const useStyles = makeStyles(theme => ({
   root: {

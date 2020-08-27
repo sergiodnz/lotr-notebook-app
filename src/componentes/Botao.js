@@ -2,9 +2,15 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-const Botao = ({ vai, children }) => {
+const Botao = ({ cor = 'primary', vai, children }) => {
   return (
-    <Button color="primary" variant="contained" component={Link} to={vai}>
+    <Button
+      color={cor}
+      variant="contained"
+      component={Link}
+      to={vai}
+      disableElevation
+    >
       {children}
     </Button>
   );

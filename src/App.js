@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import Cabecalho from './componentes/Cabecalho';
 import Rotas from './componentes/Rotas';
-import Cabecalho from './Cabecalho';
 
 const App = () => {
   return (
