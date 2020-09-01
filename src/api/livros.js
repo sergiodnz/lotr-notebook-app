@@ -9,9 +9,9 @@ export const obterLivro = id => {
 };
 
 export const adicionarRevisao = revisao => {
-  return server.post(`books/${revisao.bookId}/reviews`, revisao).then(res => {
-    return res.data;
-  });
+  return server
+    .post(`books/${revisao.bookId}/reviews`, revisao)
+    .then(res => res.data);
 };
 
 export const apagarRevisao = revisao => {

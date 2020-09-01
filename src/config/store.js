@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import pagina from '../componentes/ListaPersonagem/reduce';
-import livros from '../componentes/ListaDeLivros/reduce';
+import pagina from '../componentes/ListaPersonagem/reducer';
+import livros from '../componentes/ListaDeLivros/reducer';
 
 const reducers = combineReducers({ pagina, livros });
 

@@ -19,18 +19,11 @@ const useStyles = makeStyles(theme => ({
     color: '#fff',
   },
   table: {
-    maxWidth: 500,
-    maxHeight: '50vh',
-  },
-  paginacao: {
-    maxWidth: '100vh',
+    maxHeight: '75vh',
   },
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
   },
 }));
 
@@ -56,54 +49,47 @@ const ListaPersonagem = () => {
 
   return (
     <>
-      <TableContainer component={Paper} className={classes.table}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.head}>Nome</TableCell>
-              <TableCell className={classes.head}>Raça</TableCell>
-              <TableCell className={classes.head}>Reino</TableCell>
-            </TableRow>
-          </TableHead>
-
-          {data && (
-            <TableBody>
-              {data.map(row => (
-                <TableRow key={row._id}>
-                  <TableCell component="th" scope="row">
-                    {row.Name}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.Race}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.realm}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          )}
-        </Table>
-      </TableContainer>
-      {data && (
-        <TableContainer component={Paper} className={classes.table}>
+      <Paper>
+        <TableContainer className={classes.table}>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                  count={total ? total : 0}
-                  rowsPerPage={limit ? limit : 10}
-                  page={page ? page : 0}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
+                <TableCell className={classes.head}>Nome</TableCell>
+                <TableCell className={classes.head}>Raça</TableCell>
+                <TableCell className={classes.head}>Reino</TableCell>
               </TableRow>
             </TableHead>
+
+            {data && (
+              <TableBody>
+                {data.map(row => (
+                  <TableRow key={row._id}>
+                    <TableCell component="th" scope="row">
+                      {row.Name}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.Race}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.realm}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
           </Table>
         </TableContainer>
-      )}
-
+        {data && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            count={total ? total : 0}
+            rowsPerPage={limit ? limit : 10}
+            page={page ? page : 0}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        )}
+      </Paper>
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>

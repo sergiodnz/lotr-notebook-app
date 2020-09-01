@@ -11,15 +11,12 @@ import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
 import { Debounce } from 'react-throttle';
 import { procurarPersonagem } from '../../api/personagem';
-import PageContent from '../PageContent';
+import PageContent from '../Comum/PageContent';
 import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -33,6 +30,8 @@ const Personagens = () => {
       procurarPersonagem(nome).then(data => {
         setPersonagens(data);
       });
+    } else {
+      setPersonagens([]);
     }
   };
 

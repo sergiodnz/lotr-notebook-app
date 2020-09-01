@@ -10,12 +10,12 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 2,
     marginBottom: theme.spacing(10),
   },
-  Button: {
-    marginRight: theme.spacing(2),
+  titulo: {
+    flexGrow: 1,
   },
 }));
 
-const Cabecalho = ({ name, children }) => {
+const Cabeca = ({ name, children }) => {
   const classes = useStyles();
 
   return (
@@ -23,7 +23,7 @@ const Cabecalho = ({ name, children }) => {
       <div className={classes.root}>
         <AppBar position="absolute">
           <Toolbar>
-            <Typography variant="h6" color="inherit">
+            <Typography variant="h6" color="inherit" className={classes.titulo}>
               {name}
             </Typography>
             <Opcoes />
@@ -35,4 +35,4 @@ const Cabecalho = ({ name, children }) => {
   );
 };
 
-export default Cabecalho;
+export default Cabeca;

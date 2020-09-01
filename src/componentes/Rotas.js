@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Livros from '../pages/Livros';
 import Movies from '../pages/Movies';
 import Personagens from '../componentes/BuscaPersonagem';
+import DetalheLivro from '../componentes/DetalheLivro';
 
 const Rotas = () => {
   return (
@@ -15,7 +16,7 @@ const Rotas = () => {
         <Movies />
       </Route>
       <Route path="/livros/:id">
-        <Livros />
+        <DetalheLivro />
       </Route>
       <Route path="/livros">
         <Livros />

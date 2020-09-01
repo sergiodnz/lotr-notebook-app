@@ -1,5 +1,5 @@
 import React from 'react';
-import PageContent from '../componentes/PageContent';
+import PageContent from '../componentes/Comum/PageContent';
 
 const Movies = () => {
   return (

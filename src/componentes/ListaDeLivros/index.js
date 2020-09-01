@@ -27,25 +27,15 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
   title: {
     fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
   },
 });
 
 const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
   const livros = useSelector(store => {
-    console.log(store.livros);
     return store.livros;
   });
 
@@ -64,13 +54,39 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
   const listaLivros = livros.slice().sort((a, b) => {
     return obtemOrdenacaoLista(b, a, ordenacao, sentido);
   });
-  let i = 2;
+
+  const mediaRevisoes = revisoes => {
+    if (revisoes) {
+      const arr = { qtde: 0, soma: 0 };
+      revisoes.map(review => {
+        arr.soma += review.stars;
+        arr.qtde += 1;
+        return arr;
+      });
+      return arr.soma / arr.qtde;
+    } else {
+      return 0;
+    }
+  };
+
+  const melhorRevisao = revisoes => {
+    const arr = { maior: 0, text: 'Escreva a primeira revisão!' };
+    if (revisoes) {
+      revisoes.map(review => {
+        if (review.stars > arr.maior) {
+          arr.maior = review.stars;
+          arr.text = review.text;
+        }
+        return review;
+      });
+    }
+    return arr.text;
+  };
   return (
     <Grid container spacing={2} padding={2}>
-      {listaLivros.map(livro => {
-        i = i + 1;
+      {listaLivros.map((livro, index) => {
         return (
-          <Grid key={livro._id} item xs={4} lg={4}>
+          <Grid key={livro._id} item xs={12} md={4}>
             <Card className={classes.root}>
               <CardContent>
                 <Typography
@@ -78,14 +94,18 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
                   color="textSecondary"
                   gutterBottom
                 >
-                  {livro.reviewCount} Revisões
+                  Revisões: {livro.reviewCount}
                 </Typography>
-                <Rating name="read-only" value={i} readOnly />
+                <Rating
+                  name="read-only"
+                  value={mediaRevisoes(livro.reviews)}
+                  readOnly
+                />
                 <Typography variant="h5" component="h2">
                   {livro.name}
                 </Typography>
                 <Typography variant="body2" component="p">
-                  {'"É bom demais Junio"'}
+                  {melhorRevisao(livro.reviews)}
                 </Typography>
               </CardContent>
               <CardActions>

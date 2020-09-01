@@ -1,5 +1,5 @@
 import React from 'react';
-import PageContent from '../componentes/PageContent';
+import PageContent from '../componentes/Comum/PageContent';
 import ListaDeLivros, { CHAVE_ORDENACAO } from '../componentes/ListaDeLivros';
 
 const Livros = () => {
