@@ -31,13 +31,11 @@ const useStyles = makeStyles(theme => ({
 
 const mediaRevisoes = revisoes => {
   if (revisoes) {
-    const arr = { qtde: 0, soma: 0 };
-    revisoes.map(review => {
-      arr.soma += review.stars;
-      arr.qtde += 1;
-      return arr;
-    });
-    return arr.soma / arr.qtde;
+    const soma = revisoes.reduce((acc, item) => {
+      acc += item.stars;
+      return acc;
+    }, 0);
+    return soma / revisoes.length;
   } else {
     return 0;
   }

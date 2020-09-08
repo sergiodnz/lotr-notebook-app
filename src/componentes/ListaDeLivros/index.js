@@ -57,36 +57,34 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
 
   const mediaRevisoes = revisoes => {
     if (revisoes) {
-      const arr = { qtde: 0, soma: 0 };
-      revisoes.map(review => {
-        arr.soma += review.stars;
-        arr.qtde += 1;
-        return arr;
-      });
-      return arr.soma / arr.qtde;
+      const soma = revisoes.reduce((acc, item) => {
+        acc += item.stars;
+        return acc;
+      }, 0);
+      return soma / revisoes.length;
     } else {
       return 0;
     }
   };
 
   const melhorRevisao = revisoes => {
-    const arr = { maior: 0, text: 'Escreva a primeira revisão!' };
-    if (revisoes) {
-      revisoes.map(review => {
-        if (review.stars > arr.maior) {
-          arr.maior = review.stars;
-          arr.text = review.text;
-        }
-        return review;
-      });
+    if (!revisoes) {
+      return 0;
     }
-    return arr.text;
+
+    const maior = revisoes.reduce((acc, item) => {
+      acc = acc > item.stars ? acc : item.stars;
+      return acc;
+    }, 0);
+
+    return maior;
   };
+
   return (
     <Grid container spacing={2} padding={2}>
       {listaLivros.map((livro, index) => {
         return (
-          <Grid key={livro._id} item xs={12} md={4}>
+          <Grid key={livro._id} item xs={12}>
             <Card className={classes.root}>
               <CardContent>
                 <Typography
@@ -101,10 +99,8 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
                   value={mediaRevisoes(livro.reviews)}
                   readOnly
                 />
-                <Typography variant="h5" component="h2">
-                  {livro.name}
-                </Typography>
-                <Typography variant="body2" component="p">
+                <Typography component="h5">{livro.name}</Typography>
+                <Typography component="p">
                   {melhorRevisao(livro.reviews)}
                 </Typography>
               </CardContent>

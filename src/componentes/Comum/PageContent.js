@@ -16,8 +16,8 @@ const PageContent = ({ name, children }) => {
   return (
     <div className={classes.root}>
       <div>
-        <Typography variant="h6">notebook app / {name}</Typography>
-        <Typography variant="h8">pathname: ( {pathname} )</Typography>
+        <Typography variant="h5">notebook app / {name}</Typography>
+        <Typography variant="h6">pathname: ( {pathname} )</Typography>
         <hr />
       </div>
       {children}

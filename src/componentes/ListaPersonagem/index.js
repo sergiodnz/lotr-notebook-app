@@ -65,10 +65,10 @@ const ListaPersonagem = () => {
                 {data.map(row => (
                   <TableRow key={row._id}>
                     <TableCell component="th" scope="row">
-                      {row.Name}
+                      {row.name}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row.Race}
+                      {row.race}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {row.realm}

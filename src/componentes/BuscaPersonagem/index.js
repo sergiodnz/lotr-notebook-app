@@ -60,6 +60,8 @@ const Personagens = () => {
                   <TableCell>Raça</TableCell>
                   <TableCell>Reino</TableCell>
                   <TableCell>Gênero</TableCell>
+                  <TableCell>Nascimento</TableCell>
+                  <TableCell>Morte</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -68,13 +70,19 @@ const Personagens = () => {
                   personagens.map(personagem => (
                     <TableRow key={personagem._id}>
                       <TableCell component="th" scope="row">
-                        {personagem.Name}
+                        {personagem.name}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {personagem.Race}
+                        {personagem.race}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {personagem.realm}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {personagem.birth}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {personagem.death}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {personagem.gender}

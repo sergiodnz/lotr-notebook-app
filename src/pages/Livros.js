@@ -5,10 +5,7 @@ import ListaDeLivros, { CHAVE_ORDENACAO } from '../componentes/ListaDeLivros';
 const Livros = () => {
   return (
     <PageContent name="Livros">
-      <ListaDeLivros
-        titulo="LOTR Acervo"
-        ordenacaoInicial={CHAVE_ORDENACAO.NOME}
-      />
+      <ListaDeLivros titulo="Acervo" ordenacaoInicial={CHAVE_ORDENACAO.NOME} />
     </PageContent>
   );
 };
