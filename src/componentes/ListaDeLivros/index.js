@@ -4,8 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-import Rating from '@material-ui/lab/Rating';
 import Typography from '@material-ui/core/Typography';
+import Rating from '@material-ui/lab/Rating';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -68,20 +68,28 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
   };
 
   const melhorRevisao = revisoes => {
+    const melhor = { stars: 0, text: '' };
     if (!revisoes) {
       return 0;
     }
 
-    const maior = revisoes.reduce((acc, item) => {
+    revisoes.reduce((acc, item) => {
       acc = acc > item.stars ? acc : item.stars;
+      if (acc === item.stars) {
+        melhor.stars = item.stars;
+        melhor.text = item.text;
+      }
       return acc;
     }, 0);
 
-    return maior;
+    return melhor.text;
   };
 
   return (
     <Grid container spacing={2} padding={2}>
+      <Grid item xs={12}>
+        <Typography variant="h6">{titulo}</Typography>
+      </Grid>
       {listaLivros.map((livro, index) => {
         return (
           <Grid key={livro._id} item xs={12}>
@@ -99,9 +107,9 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
                   value={mediaRevisoes(livro.reviews)}
                   readOnly
                 />
-                <Typography component="h5">{livro.name}</Typography>
-                <Typography component="p">
-                  {melhorRevisao(livro.reviews)}
+                <Typography component="h4">{livro.name}</Typography>
+                <Typography component="h6">
+                  <i>"{melhorRevisao(livro.reviews)}"</i>
                 </Typography>
               </CardContent>
               <CardActions>
