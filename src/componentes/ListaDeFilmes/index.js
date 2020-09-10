@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { atualizarFilme, carregarFilmes } from './action';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
+import { IconButton, makeStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import SortIcon from '@material-ui/icons/Sort';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { atualizarFilme, carregarFilmes } from './action';
 
 // cria enum para as chaves de ordenação disponíveis
 export const ORDER_KEY = {
@@ -29,14 +26,18 @@ export const ORDER_DIRECTION = {
   REVERSE: -1,
 };
 
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  title: {
+    fontSize: 14,
+  },
+});
+
 const ListaDeFilmes = ({ titulo, filmes, order }) => {
   const dispatch = useDispatch();
-
-  const [expanded, setExpanded] = React.useState(titulo);
-
-  const handleChange = panel => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const classes = useStyles();
 
   const atualizar = (_id, { bookmarked, watched }) => {
     dispatch(atualizarFilme({ _id, bookmarked, watched }));
@@ -97,96 +98,92 @@ const ListaDeFilmes = ({ titulo, filmes, order }) => {
   );
 
   return (
-    <>
-      {listaFilmes.length > 0 && (
-        <Accordion
-          square
-          expanded={expanded === titulo}
-          onChange={handleChange(titulo)}
-        >
-          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-            <Typography variant="h6">{titulo}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid container spacing={2} padding={2}>
-              <Grid item xs={12}>
-                {order === ORDER_KEY.AWARDS && (
-                  <Button onClick={() => mudaOrdenacao(ORDER_KEY.AWARDS)}>
-                    {btnAwardsAscDesc}
-                  </Button>
+    <Grid container spacing={2} padding={2}>
+      <Grid item>
+        {order === ORDER_KEY.AWARDS && (
+          <IconButton
+            size="small"
+            onClick={() => mudaOrdenacao(ORDER_KEY.AWARDS)}
+          >
+            {btnAwardsAscDesc}
+          </IconButton>
+        )}
+        {order === ORDER_KEY.NAME && (
+          <IconButton
+            size="small"
+            onClick={() => mudaOrdenacao(ORDER_KEY.NAME)}
+          >
+            {btnNameAscDesc}
+          </IconButton>
+        )}
+      </Grid>
+      <Grid item>
+        <Typography variant="h6">{titulo}</Typography>
+      </Grid>
+
+      {listaFilmes.map(movie => {
+        // constantes para exibir ou ocultar botoes de acordo com a lista a ser exibida
+        const showCancelar = movie.watched || movie.bookmarked;
+        const showAdicionar = !(movie.watched || movie.bookmarked);
+        return (
+          <Grid key={movie._id} item xs={12}>
+            <Card className={classes.root} variant="outlined">
+              <CardContent>
+                <Typography variant="subtitle1">{movie.name}</Typography>
+                <Typography
+                  variant="subtitle2"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Academy Awards: {movie.academyAwardWins}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {showAdicionar && (
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      atualizar(movie._id, {
+                        bookmarked: true,
+                        watched: false,
+                      })
+                    }
+                  >
+                    <BookmarkIcon />
+                  </IconButton>
                 )}
-                {order === ORDER_KEY.NAME && (
-                  <Button onClick={() => mudaOrdenacao(ORDER_KEY.NAME)}>
-                    {btnNameAscDesc}
-                  </Button>
+                {showAdicionar && (
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      atualizar(movie._id, {
+                        bookmarked: false,
+                        watched: true,
+                      })
+                    }
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
                 )}
-              </Grid>
-              {listaFilmes.map(movie => {
-                // constantes para exibir ou ocultar botoes de acordo com a lista a ser exibida
-                const showCancelar = movie.watched || movie.bookmarked;
-                const showAdicionar = !(movie.watched || movie.bookmarked);
-                return (
-                  <Grid key={movie._id} item xs={12}>
-                    <Card>
-                      <CardContent>
-                        <Typography variant="subtitle1">
-                          {movie.name}
-                        </Typography>
-                        <Typography
-                          variant="subtitle2"
-                          color="textSecondary"
-                          gutterBottom
-                        >
-                          Academy Awards: {movie.academyAwardWins}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        {showAdicionar && (
-                          <Button
-                            onClick={() =>
-                              atualizar(movie._id, {
-                                bookmarked: true,
-                                watched: false,
-                              })
-                            }
-                          >
-                            <BookmarkIcon />
-                          </Button>
-                        )}
-                        {showAdicionar && (
-                          <Button
-                            onClick={() =>
-                              atualizar(movie._id, {
-                                bookmarked: false,
-                                watched: true,
-                              })
-                            }
-                          >
-                            <VisibilityIcon />
-                          </Button>
-                        )}
-                        {showCancelar && (
-                          <Button
-                            onClick={() =>
-                              atualizar(movie._id, {
-                                bookmarked: false,
-                                watched: false,
-                              })
-                            }
-                          >
-                            <RemoveCircleIcon />
-                          </Button>
-                        )}
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-      )}
-    </>
+                {showCancelar && (
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      atualizar(movie._id, {
+                        bookmarked: false,
+                        watched: false,
+                      })
+                    }
+                  >
+                    <RemoveCircleIcon />
+                  </IconButton>
+                )}
+              </CardActions>
+            </Card>
+          </Grid>
+        );
+      })}
+    </Grid>
   );
 };
 

@@ -1,7 +1,10 @@
 import server from '../config/server';
 
 export const obterFilmes = () => {
-  return server.get('movies').then(res => res.data);
+  return server.get('movies').then(res => {
+    console.log(res.data);
+    return res.data;
+  });
 };
 
 export const atualizarFilme = movie => {

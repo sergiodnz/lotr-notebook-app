@@ -88,7 +88,9 @@ const DetalheLivro = () => {
   };
 
   const apagar = idRevisaoApagar => {
-    api.apagarRevisao(livro._id, idRevisaoApagar).then(retorno => retorno);
+    api.apagarRevisao(livro._id, idRevisaoApagar).then(retorno => {
+      setRevisoes(livro.reviews.filter(review => review._id !== retorno));
+    });
   };
 
   const atualizaRevisoesPagina = revisaoAtualizado => {

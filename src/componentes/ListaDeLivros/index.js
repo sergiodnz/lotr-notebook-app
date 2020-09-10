@@ -87,13 +87,14 @@ const ListaDeLivros = ({ titulo, ordenacaoInicial }) => {
 
   return (
     <Grid container spacing={2} padding={2}>
-      <Grid item xs={12}>
+      <Grid item>{''}</Grid>
+      <Grid item>
         <Typography variant="h6">{titulo}</Typography>
       </Grid>
       {listaLivros.map((livro, index) => {
         return (
           <Grid key={livro._id} item xs={12}>
-            <Card className={classes.root}>
+            <Card className={classes.root} variant="outlined">
               <CardContent>
                 <Typography
                   className={classes.title}
